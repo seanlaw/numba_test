@@ -1,0 +1,42 @@
+name: Tests
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+jobs
+  unit-testing:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        python-version: ['3.9', '3.10']
+    steps:
+      - uses: actions/checkout@v3
+        shell: bash
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Display Python Version
+        run: python -c "import sys; print(sys.version)"
+        shell: bash
+      - name: Install Dependencies
+        run: python -m pip install numba numpy scipy
+        shell: bash
+      - name: Link OpenMP
+        run: |
+             if [ "$RUNNER_OS" == "macOS" ]; then
+                  echo "Linking OpenMP into /usr/local/lib"
+                  brew link --force libomp
+                  echo "Checking /usr/local/lib for OpenMP"
+                  ls /usr/local/lib | grep lib*omp*.dylib
+                  # echo "Changing  @rpath for the omppool.cpython-x-darwin.so shared object to look in /usr/local/lib"
+                  # ls "$(python -c 'import site; print(site.getsitepackages()[0])')"/numba/np/ufunc/omppool.*.so | xargs install_name_tool -change @rpath/libomp.dylib /usr/local/lib/libomp.dylib
+                  echo "Checking Numba OpenMP Access"
+                  python -c "from numba.np.ufunc import omppool"
+             fi
+        shell: bash
+      - name: Show Full Numba Environment
+        run: python -m numba -s
+        shell: bash
