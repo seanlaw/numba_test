@@ -26,6 +26,8 @@ jobs:
       - name: Link OpenMP
         run: |
              if [ "$RUNNER_OS" == "macOS" ]; then
+                  echo "Install OpenMP via Conda"
+                  conda install -c intel -y openmp
                   echo "Linking OpenMP into /usr/local/lib"
                   brew link --force libomp
                   echo "Checking /usr/local/lib for OpenMP"
