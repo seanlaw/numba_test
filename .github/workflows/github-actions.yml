@@ -37,7 +37,7 @@ jobs:
                   #ls /usr/local/lib | grep lib*omp*.dylib
                   echo "Changing  @rpath for the omppool.cpython-x-darwin.so shared object to look in $CONDA/lib"
                   ls "$(python -c 'import site; print(site.getsitepackages()[0])')"/numba/np/ufunc/omppool.*.so | xargs install_name_tool -change @rpath/libiomp5.dylib $CONDA/lib/libiomp5.dylib
-                  ls "$(python -c 'import site; print(site.getsitepackages()[0])')"/numba/np/ufunc/omppool.*.so | xargs install_name_tool -change @rpath/libomp.dylib $CONDA/lib/libomp.dylib
+                  ls "$(python -c 'import site; print(site.getsitepackages()[0])')"/numba/np/ufunc/omppool.*.so | xargs install_name_tool -change @rpath/libomp.dylib /usr/local/lib/libomp.dylib
                   echo "Checking Numba OpenMP Access"
                   python -c "from numba.np.ufunc import omppool"
              fi
