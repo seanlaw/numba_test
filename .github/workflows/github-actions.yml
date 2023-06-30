@@ -26,6 +26,8 @@ jobs:
       - name: Link OpenMP
         run: |
              if [ "$RUNNER_OS" == "macOS" ]; then
+                  echo "Find Conda Directory"
+                  echo $CONDA
                   echo "Install OpenMP via Conda"
                   conda install -c intel -y openmp
                   echo "Linking OpenMP into /usr/local/lib"
