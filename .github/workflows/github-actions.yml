@@ -29,7 +29,7 @@ jobs:
                   echo "Install OpenMP via Conda"
                   conda install -c intel -y openmp
                   echo "Checking $CONDA/lib for OpenMP"
-                  ls $CONDA/lib | grep lib*omp*.dylib
+                  ls $CONDA/lib/lib*omp*.dylib
                   echo "Linking OpenMP into /usr/local/lib"
                   brew link --force libomp
                   echo "Checking /usr/local/lib for OpenMP"
